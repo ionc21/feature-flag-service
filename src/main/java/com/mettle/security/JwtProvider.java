@@ -1,5 +1,6 @@
 package com.mettle.security;
 
+import com.mettle.security.exception.TokenGenerationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,7 +46,7 @@ public class JwtProvider {
             InputStream resourceAsStream = getClass().getResourceAsStream(keyStorePath);
             keyStore.load(resourceAsStream, keyStorePassword.toCharArray());
         } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
-            throw new RuntimeException("Exception occurred while loading keystore", e);
+            throw new TokenGenerationException("Exception occurred while loading keystore", e);
         }
     }
 
@@ -59,20 +60,11 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String generateTokenWithUserName(String username) {
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(from(Instant.now()))
-                .signWith(getPrivateKey())
-                .setExpiration(from(Instant.now().plusMillis(jwtExpirationInMillis)))
-                .compact();
-    }
-
     private PrivateKey getPrivateKey() {
         try {
             return (PrivateKey) keyStore.getKey(keyAlias, privateKeyPassphrase.toCharArray());
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
-            throw new RuntimeException("Exception occurred while retrieving public key from keystore", e);
+            throw new TokenGenerationException("Exception occurred while retrieving public key from keystore", e);
         }
     }
 
@@ -85,7 +77,7 @@ public class JwtProvider {
         try {
             return keyStore.getCertificate(keyAlias).getPublicKey();
         } catch (KeyStoreException e) {
-            throw new RuntimeException("Exception occurred while retrieving public key from keystore", e);
+            throw new TokenGenerationException("Exception occurred while retrieving public key from keystore", e);
         }
     }
 
