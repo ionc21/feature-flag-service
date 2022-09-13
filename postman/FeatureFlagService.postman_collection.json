@@ -1,0 +1,192 @@
+{
+	"info": {
+		"_postman_id": "05c75fa9-9b94-472e-9677-33a0bb2a1a61",
+		"name": "FeatureFlagService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "931258"
+	},
+	"item": [
+		{
+			"name": "GET Enabled feature",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/feature/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"feature",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /user/signup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Vasia\",\n    \"lastName\": \"Pup\",\n    \"userName\": \"pupkin\",\n    \"password\": \"pass\",\n    \"role\": \"ADMIN\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /user/login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"userName\": \"pupkin\",\n     \"password\": \"pass\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST addFeature",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"userName\": \"pupkin\",\n     \"password\": \"pass\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT enable feature",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJwdXBraW4iLCJpYXQiOjE2NjMwNjU5MzEsImV4cCI6MTY2MzA3NDkzMX0.NRK0TMTH3rHDpNLhTf_psLWoDRPp1FyghdUtA9ayPuPffZujFJadcMzBNp52HXx78UjXIEL2K4832SPYHT7E_MrAaQa_H7Tp2hel4Xl42b3rVAXz-OJeLpRQjjW67HheerB_lcZ964dBtTadOmfC1kdfNWnFYF98TNK9bnVyqr4q-XzhSKpGJcnsogdhh171QOFreCUiglnjohEemZfVHV53qNonIKQ2t7Bbsts0RJl5Rpc0NJWNZec2Lz0ufZ8ATgoh50rIw4hHH5Lfh_wBKR5bF-Nt7R4LF8i62NrC6tKpGPU3vJaKpkGUehEWlyrkgJv_unlPZxxmo2P04VGcvemoZKiUGmH285NH6FygoElXWWvl_Bwlss8-HJd8sCWdcbDGnqiU_REQfekvYVmw0ZuZrLQKar8sGvAKXrC80v4n8g0mUPcP8pT5cR0scvK229Q9D76DvuywQ0Nma5R9F28a8S7pasSbTrXKX5Lr7R2rlP1VVSaQ8ifzLfBa2CCaYooySO2wksZlfZewAK__YU40dBlWDqJ8HresjOPc_8z9m79rvqNkcjZCP3HWlIlTCPdoKZJ4hifAsAHzAxjndNC8boQULIq93gwz_4wz8vCALxnZ-VD71kuXTjQ-_TcOmGHp8Qhh_h4OZ49SNZpA2lx6ORDA0YkNW7BaUZzuFmI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\": \"pupkin\",\n    \"featureName\": 2\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/feature_flags/feature/enable",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"feature_flags",
+						"feature",
+						"enable"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
