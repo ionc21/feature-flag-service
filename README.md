@@ -33,10 +33,8 @@ copy to src/test/resources for use in testing.
   - gradlew build
 
 ## How to run locally
-Ensure you are in the project directory and have executed bin/set-env.sh to set required environment variables, then:
-- either run from within your IDE (having set the environment variables as per bin/set-env.sh) or
-- build from the command line using command and then run
-  - gradlew run
+- build from the command line using command and then run 
+- ./gradlew bootRun --args='--spring.profiles.active=local'
 
 ## How to test manually on localhost
 - Postman collection is under "/postman/FeatureFlagService.postman_collection.json"
