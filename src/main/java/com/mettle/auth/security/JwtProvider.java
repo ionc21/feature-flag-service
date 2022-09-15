@@ -1,6 +1,6 @@
-package com.mettle.security;
+package com.mettle.auth.security;
 
-import com.mettle.security.exception.TokenGenerationException;
+import com.mettle.auth.security.exception.TokenGenerationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
 import java.security.cert.CertificateException;
+import java.time.Clock;
 import java.time.Instant;
 
 import static io.jsonwebtoken.Jwts.parserBuilder;
@@ -26,17 +27,19 @@ public class JwtProvider {
     private final String keyStorePassword;
     private final String keyAlias;
     private final String privateKeyPassphrase;
+    private final Clock clock;
 
-    public JwtProvider(@Value("${jwt.expiration.time}") Long jwtExpirationInMillis,
+    JwtProvider(@Value("${jwt.expiration.time}") Long jwtExpirationInMillis,
                        @Value("${app.security.jwt.keystore.location}") String keyStorePath,
                        @Value("${app.security.jwt.keystore.password}") String keyStorePassword,
                        @Value("${app.security.jwt.key-alias}") String keyAlias,
-                       @Value("${app.security.jwt.private-key-passphrase}") String privateKeyPassphrase) {
+                       @Value("${app.security.jwt.private-key-passphrase}") String privateKeyPassphrase, Clock clock) {
         this.jwtExpirationInMillis = jwtExpirationInMillis;
         this.keyStorePath = keyStorePath;
         this.keyStorePassword = keyStorePassword;
         this.keyAlias = keyAlias;
         this.privateKeyPassphrase = privateKeyPassphrase;
+        this.clock = clock;
     }
 
     @PostConstruct
@@ -54,9 +57,9 @@ public class JwtProvider {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
         return Jwts.builder()
                 .setSubject(principal.getUsername())
-                .setIssuedAt(from(Instant.now()))
+                .setIssuedAt(from(Instant.now(clock)))
                 .signWith(getPrivateKey())
-                .setExpiration(from(Instant.now().plusMillis(jwtExpirationInMillis)))
+                .setExpiration(from(Instant.now(clock).plusMillis(jwtExpirationInMillis)))
                 .compact();
     }
 

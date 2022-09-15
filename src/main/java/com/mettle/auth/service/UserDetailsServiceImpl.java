@@ -1,4 +1,4 @@
-package com.mettle.service;
+package com.mettle.auth.service;
 
 import com.mettle.model.Role;
 import com.mettle.model.User;

@@ -18,17 +18,25 @@ import static org.hibernate.annotations.FetchMode.JOIN;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "USER_GROUP")
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
 
     @Id
+    @EqualsAndHashCode.Include
+    @ToString.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ToString.Include
     private String firstName;
+    @ToString.Include
     private String lastName;
+    @ToString.Include
     @NotBlank(message = "Username is required")
     private String userName;
     @NotBlank(message = "Password is required")
     private String password;
+    @ToString.Include
     @CreationTimestamp
     private Instant createdAt;
 

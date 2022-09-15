@@ -1,6 +1,6 @@
 package com.mettle.config;
 
-import com.mettle.security.JwtAuthenticationFilter;
+import com.mettle.auth.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,9 +53,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationManagerBuilder.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
-
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+  /*  @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        // @formatter:off
+        httpSecurity.cors().and()
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/feature_flags/**").authenticated()
+                .antMatchers("/swagger-ui/index.html/**",
+                        "/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger-resources/**",
+                        "/configuration/security",
+                        "/swagger-ui.html",
+                        "/webjars/**")
+                .permitAll()
+                .antMatchers("/api/auth/**")
+                .permitAll();
+        httpSecurity.addFilterBefore(jwtAuthenticationFilter,
+                UsernamePasswordAuthenticationFilter.class);
+        // @formatter:on
+
+        return httpSecurity.build();
+    }*/
 }

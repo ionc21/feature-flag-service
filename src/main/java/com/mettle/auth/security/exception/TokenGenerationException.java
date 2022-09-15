@@ -1,4 +1,4 @@
-package com.mettle.security.exception;
+package com.mettle.auth.security.exception;
 
 public class TokenGenerationException extends RuntimeException {
 

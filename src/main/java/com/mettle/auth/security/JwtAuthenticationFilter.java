@@ -1,4 +1,4 @@
-package com.mettle.security;
+package com.mettle.auth.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

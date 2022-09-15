@@ -6,6 +6,7 @@ import com.mettle.dto.UserFeatureResponse;
 import com.mettle.model.Feature;
 import com.mettle.service.FeatureService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,6 +21,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 import static java.util.Objects.requireNonNull;
@@ -31,7 +33,7 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("feature_flags")
-public class FeatureFlagController {
+class FeatureFlagController {
     private final FeatureService featureService;
 
     @Operation(summary = "Enable feature for the requested user")
@@ -43,7 +45,7 @@ public class FeatureFlagController {
     })
     @PutMapping(value = "feature/enable", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
-    Boolean enable(@RequestBody UserFeatureEnableRequest userFeatureEnableRequest) {
+    Boolean enable(@RequestBody @Valid UserFeatureEnableRequest userFeatureEnableRequest) {
         return featureService.enableFeature(userFeatureEnableRequest);
     }
 
@@ -55,7 +57,7 @@ public class FeatureFlagController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
     })
     @GetMapping(value = "feature/enabled/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<UserFeatureResponse> getAllEnabledFeatures(@AuthenticationPrincipal User user) {
+    ResponseEntity<UserFeatureResponse> getAllEnabledFeatures(@AuthenticationPrincipal @Parameter(hidden = true) User user) {
         return featureService.findAllGlobalAndUserEnabled(user.getUsername());
     }
 
@@ -68,7 +70,7 @@ public class FeatureFlagController {
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
-    ResponseEntity<Feature> addNewFeature(@RequestBody FeatureCreateRequest featureCreateRequest) {
+    ResponseEntity<Feature> addNewFeature(@RequestBody @Valid FeatureCreateRequest featureCreateRequest) {
         var httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(URI.create(requireNonNull(fromCurrentRequest().build().getPath())));
         return new ResponseEntity<>(featureService.addNewFeature(featureCreateRequest), httpHeaders, CREATED);
