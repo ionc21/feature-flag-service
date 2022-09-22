@@ -56,7 +56,7 @@ class FeatureFlagControllerTestIT {
                 .andExpect(status().is(HttpStatus.OK.value()));
         String responseContent = result.andReturn().getResponse().getContentAsString();
         AuthenticationResponse authenticationResponse = mapper.readValue(responseContent, AuthenticationResponse.class);
-        token = authenticationResponse.getAuthenticationToken();
+        token = authenticationResponse.authenticationToken();
     }
 
     @Test

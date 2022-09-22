@@ -1,9 +1,9 @@
 package com.mettle.rest;
 
-import com.mettle.dto.FeatureCreateRequest;
-import com.mettle.dto.UserFeatureEnableRequest;
-import com.mettle.dto.UserFeatureResponse;
 import com.mettle.model.Feature;
+import com.mettle.rest.dto.FeatureCreateRequest;
+import com.mettle.rest.dto.UserFeatureEnableRequest;
+import com.mettle.rest.dto.UserFeatureResponse;
 import com.mettle.service.FeatureService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -46,7 +46,7 @@ class FeatureFlagController {
     @PutMapping(value = "feature/enable", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
     Boolean enable(@RequestBody @Valid UserFeatureEnableRequest userFeatureEnableRequest) {
-        return featureService.enableFeature(userFeatureEnableRequest);
+        return featureService.enableFeature(userFeatureEnableRequest.featureName(), userFeatureEnableRequest.userName());
     }
 
     @Operation(summary = "Get all active global and user specific features")
@@ -73,6 +73,6 @@ class FeatureFlagController {
     ResponseEntity<Feature> addNewFeature(@RequestBody @Valid FeatureCreateRequest featureCreateRequest) {
         var httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(URI.create(requireNonNull(fromCurrentRequest().build().getPath())));
-        return new ResponseEntity<>(featureService.addNewFeature(featureCreateRequest), httpHeaders, CREATED);
+        return new ResponseEntity<>(featureService.addNewFeature(featureCreateRequest.featureName()), httpHeaders, CREATED);
     }
 }

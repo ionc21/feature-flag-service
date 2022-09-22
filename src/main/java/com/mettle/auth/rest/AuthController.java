@@ -36,7 +36,7 @@ class AuthController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
     })
     @PostMapping("/login")
-    public AuthenticationResponse login(@RequestBody @Valid LoginRequest loginRequest) {
+    AuthenticationResponse login(@RequestBody @Valid LoginRequest loginRequest) {
         return authService.login(loginRequest);
     }
 
@@ -48,7 +48,7 @@ class AuthController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
     })
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody @Valid RegisterRequest registerRequest) {
+    ResponseEntity<String> signup(@RequestBody @Valid RegisterRequest registerRequest) {
         authService.signup(registerRequest);
         return new ResponseEntity<>("User Registration Successful", OK);
     }

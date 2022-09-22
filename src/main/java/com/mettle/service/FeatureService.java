@@ -1,12 +1,10 @@
 package com.mettle.service;
 
-import com.mettle.dto.FeatureCreateRequest;
-import com.mettle.dto.UserFeatureEnableRequest;
-import com.mettle.dto.UserFeatureResponse;
 import com.mettle.model.Feature;
 import com.mettle.model.User;
 import com.mettle.repository.FeatureRepository;
 import com.mettle.repository.UserRepository;
+import com.mettle.rest.dto.UserFeatureResponse;
 import com.mettle.transactionwrapper.TransactionWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,25 +29,19 @@ public class FeatureService {
     private ResponseEntity<UserFeatureResponse> getAllEnabledFeaturesForCurrentUser(String userName) {
         User user = userRepository.findByUserName(userName).orElseThrow(() -> new EntityNotFoundException("User not found with name - " + userName));
 
-        return ResponseEntity.ok(UserFeatureResponse.builder()
-                .globallyEnabled(featureRepository.findByEnabledTrue())
-                .userEnabled(user.getFeatures())
-                .build());
+        return ResponseEntity.ok(new UserFeatureResponse(featureRepository.findByEnabledTrue(), user.getFeatures()));
     }
 
-    public Feature addNewFeature(FeatureCreateRequest featureCreateRequest) {
+    public Feature addNewFeature(String featureName) {
         return transactionWrapper
                 .runFunctionInNewTransaction(entityManager -> featureRepository.save(Feature.builder()
-                        .name(featureCreateRequest.getFeatureName())
+                        .name(featureName)
                         .enabled(false)
                         .build()));
     }
 
-    public Boolean enableFeature(UserFeatureEnableRequest userFeatureEnableRequest) {
-        String featureName = userFeatureEnableRequest.getFeatureName();
-        String userName = userFeatureEnableRequest.getUserName();
-        transactionWrapper.runInNewTransaction(entityManager ->  enableUserFeature(featureName, userName));
-
+    public Boolean enableFeature(String featureName, String userName) {
+        transactionWrapper.runInNewTransaction(entityManager -> enableUserFeature(featureName, userName));
         return true;
     }
 

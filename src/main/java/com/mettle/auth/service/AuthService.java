@@ -35,33 +35,30 @@ public class AuthService {
     private final TransactionWrapper transactionWrapper;
 
     public void signup(RegisterRequest registerRequest) {
-        transactionWrapper.runInNewTransaction(entityManager ->  persistUser(registerRequest));
+        transactionWrapper.runInNewTransaction(entityManager -> persistUser(registerRequest));
     }
 
     private void persistUser(RegisterRequest registerRequest) {
-        String requestRole = registerRequest.getRole();
+        String requestRole = registerRequest.role();
         Role role = roleRepository.findByName(requestRole)
-                .orElseThrow(() -> new EntityNotFoundException("Role does not exist - " +requestRole));
+                .orElseThrow(() -> new EntityNotFoundException("Role does not exist - " + requestRole));
         User user = User.builder()
-                .firstName(registerRequest.getFirstName())
-                .lastName(registerRequest.getLastName())
-                .userName(registerRequest.getUserName())
+                .firstName(registerRequest.firstName())
+                .lastName(registerRequest.lastName())
+                .userName(registerRequest.userName())
                 .roles(Set.of(role))
                 .features(new HashSet<>())
-                .password(passwordEncoder.encode(registerRequest.getPassword())).build();
+                .password(passwordEncoder.encode(registerRequest.password())).build();
         userRepository.save(user);
     }
 
     public AuthenticationResponse login(LoginRequest loginRequest) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUserName(),
-                loginRequest.getPassword()));
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.userName(),
+                loginRequest.password()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtProvider.generateToken(authenticate);
-        return AuthenticationResponse.builder()
-                .authenticationToken(token)
-                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
-                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
-                .userName(loginRequest.getUserName())
-                .build();
+        return new AuthenticationResponse(token, refreshTokenService.generateRefreshToken().getToken(),
+                Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()),
+                loginRequest.userName());
     }
 }
