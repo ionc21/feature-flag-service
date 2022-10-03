@@ -1,12 +1,14 @@
 package com.mettle.model;
 
 import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.hibernate.annotations.FetchMode.JOIN;
@@ -19,11 +21,9 @@ import static org.hibernate.annotations.FetchMode.JOIN;
 @NoArgsConstructor
 @Table(name = "USER_GROUP")
 @ToString(onlyExplicitlyIncluded = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
 
     @Id
-    @EqualsAndHashCode.Include
     @ToString.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -57,4 +57,17 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "feature_id")}
     )
     private Set<Feature> features;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
